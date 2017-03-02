@@ -1,0 +1,54 @@
+agent::Fischer
+
+
+allwrite :
+  int resource = -1;
+
+allread :
+
+local :
+  bool wait = true;
+  bool request = false;
+  int D = 5;
+  int delay = 0;
+  int K = 2;
+  int waittime = 0;
+  bool check = false;
+  bool incs = false;
+
+init :
+
+events :
+    wait():
+      pre(wait);
+      eff:
+         if(resource != -1) :
+		wait = true;
+	 else :
+               wait = false;
+               request = true;
+
+
+      request():
+	pre(request);
+        eff:
+          if (delay < D) :
+	        delay = delay +1 ;
+	  else: 
+                request = false;
+                x = agentid ;
+                check = true;
+       check():
+	  pre(check);
+	  eff:
+             if (waittime < K):
+		waittime = waittime+1 ;
+	     else : 
+                check = false;
+		if (x == agentid):
+			incs = true;
+		else: 	
+			wait = true;
+
+
+NAgents 2;
